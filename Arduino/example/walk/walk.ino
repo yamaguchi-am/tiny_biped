@@ -92,7 +92,7 @@ void Help() {
                   "but not persisted until saving it.");
   Serial.println("W -- save trim data to EEPROM");
   Serial.println("R -- load trim data from EEPROM");
-  Serial.println("! -- toggle swing mode");
+  Serial.println("? -- show this message");
 }
 
 WalkController walk_controller;
