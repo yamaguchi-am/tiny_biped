@@ -1,6 +1,6 @@
 /**
  * Walk the robot by IR remote commands.
- * 
+ *
  * Remote control with M-07245 OE13KRIR: IR Remote Control 13-Key.
  *
  * == Key assignments ==
@@ -22,9 +22,7 @@
 #include "walk_controller.h"
 
 const int kNumServos = 6;
-const int kServoPinMap[kNumServos] = {
-  3, 6, 9, 10, 11, 12
-};
+const int kServoPinMap[kNumServos] = {3, 6, 9, 10, 11, 12};
 
 // The center position of servo commands, in microseconds.
 const int kCenter = 1500;
@@ -35,13 +33,9 @@ IrRemote ir_remote;
 int trim[6];
 
 // In this example, we store offset value as a single 8bit signed integer.
-int DecodeTrim(char data) {
-  return static_cast<int>(data);
-}
+int DecodeTrim(char data) { return static_cast<int>(data); }
 
-char EncodeTrim(int data) {
-  return static_cast<char>(data);
-}
+char EncodeTrim(int data) { return static_cast<char>(data); }
 
 void LoadTrim() {
   Serial.print("Loading trim data:");
@@ -64,7 +58,8 @@ void SaveTrim() {
 }
 
 void OutputServoWithTrim(int id, int micros_relative_to_center) {
-  myservos_[id].writeMicroseconds(kCenter + trim[id] + micros_relative_to_center);
+  myservos_[id].writeMicroseconds(kCenter + trim[id] +
+                                  micros_relative_to_center);
 }
 
 void OutputServoAllCenter() {
@@ -88,8 +83,9 @@ void Help() {
   Serial.println("k -- previous servo channel");
   Serial.println("h -- decrease trim value");
   Serial.println("l -- increase trim value");
-  Serial.println("     Trim values are reflected instantly, "
-                  "but not persisted until saving it.");
+  Serial.println(
+      "     Trim values are reflected instantly, "
+      "but not persisted until saving it.");
   Serial.println("W -- save trim data to EEPROM");
   Serial.println("R -- load trim data from EEPROM");
   Serial.println("? -- show this message");
@@ -110,9 +106,7 @@ void setup() {
   Prompt();
 }
 
-enum Mode {
-  M_WALK, POSE_A, POSE_B, POSE_C  
-} mode = M_WALK;
+enum Mode { M_WALK, POSE_A, POSE_B, POSE_C } mode = M_WALK;
 
 void loop() {
   ControllerInput input = ir_remote.Fetch();
@@ -152,34 +146,33 @@ void loop() {
 
   if (Serial.available()) {
     char c = Serial.read();
-    switch(c) {
-    case 'j':
-      current_channel = (current_channel < kNumServos - 1) ?
-                        current_channel + 1 : 0;
-      break;
-    case 'k':
-      current_channel = (current_channel > 0) ?
-                        current_channel - 1 : kNumServos - 1;
-      break;
-    case 'h':
-      trim[current_channel] = max(-128, trim[current_channel] - 10);
-      break;
-    case 'l':
-      trim[current_channel] = min(127, trim[current_channel] + 10);
-      break;
-    case 'R':
-      LoadTrim();
-      break;
-    case 'W':
-      SaveTrim();
-      break;
-    case '?':
-      Help();
-      break;
+    switch (c) {
+      case 'j':
+        current_channel =
+            (current_channel < kNumServos - 1) ? current_channel + 1 : 0;
+        break;
+      case 'k':
+        current_channel =
+            (current_channel > 0) ? current_channel - 1 : kNumServos - 1;
+        break;
+      case 'h':
+        trim[current_channel] = max(-128, trim[current_channel] - 10);
+        break;
+      case 'l':
+        trim[current_channel] = min(127, trim[current_channel] + 10);
+        break;
+      case 'R':
+        LoadTrim();
+        break;
+      case 'W':
+        SaveTrim();
+        break;
+      case '?':
+        Help();
+        break;
     }
     Prompt();
   }
 
   delay(15);
 }
-

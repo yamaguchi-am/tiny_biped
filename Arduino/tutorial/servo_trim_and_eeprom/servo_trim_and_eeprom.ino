@@ -1,9 +1,9 @@
 /**
  * EEPROM and trim (center position adjustment) of servos.
- * 
+ *
  * Sets up the 6 servo output pins to output PWM signal.
  * Shows a console to interactively adjust servo trim.
- * 
+ *
  * j -- next servo channel
  * k -- previous servo channel
  * h -- decrease trim value
@@ -17,20 +17,18 @@
  * It is recommended to use serial terminal software other than the serial
  * monitor in the Arduino IDE because you can execute commands without hitting
  * [enter] key.
- * 
+ *
  * Note that trim range is limited between -128 and 127[us] by this exapmle.
  * (When you need to adjust above this range, you can probably adjust it by
  * reassembling the connection between the servo horn and the servo.)
  */
 
-#include <math.h>
 #include <EEPROM.h>
 #include <Servo.h>
+#include <math.h>
 
 const int kNumServos = 6;
-const int kServoPinMap[kNumServos] = {
-  3, 6, 9, 10, 11, 12
-};
+const int kServoPinMap[kNumServos] = {3, 6, 9, 10, 11, 12};
 
 // The center position of servo commands, in microseconds.
 const int kCenter = 1500;
@@ -44,13 +42,9 @@ Servo* myservos_;
 int trim[6];
 
 // In this example, we store offset value as a single 8bit signed integer.
-int DecodeTrim(char data) {
-  return static_cast<int>(data);
-}
+int DecodeTrim(char data) { return static_cast<int>(data); }
 
-char EncodeTrim(int data) {
-  return static_cast<char>(data);
-}
+char EncodeTrim(int data) { return static_cast<char>(data); }
 
 void LoadTrim() {
   Serial.print("Loading trim data:");
@@ -73,7 +67,8 @@ void SaveTrim() {
 }
 
 void OutputServoWithTrim(int id, int micros_relative_to_center) {
-  myservos_[id].writeMicroseconds(kCenter + trim[id] + micros_relative_to_center);
+  myservos_[id].writeMicroseconds(kCenter + trim[id] +
+                                  micros_relative_to_center);
 }
 
 void OutputServoAllCenter() {
@@ -109,7 +104,9 @@ void Help() {
   Serial.println("k -- previous servo channel");
   Serial.println("h -- decrease trim value");
   Serial.println("l -- increase trim value");
-  Serial.println("     Trim values are reflected instantly, but not persisted until saving it.");
+  Serial.println(
+      "     Trim values are reflected instantly, but not persisted until "
+      "saving it.");
   Serial.println("W -- save trim data to EEPROM");
   Serial.println("R -- load trim data from EEPROM");
   Serial.println("! -- toggle swing mode");
@@ -125,35 +122,34 @@ void loop() {
 
   if (Serial.available()) {
     char c = Serial.read();
-    switch(c) {
-    case 'j':
-      current_channel = (current_channel < kNumServos - 1) ?
-                        current_channel + 1 : 0;
-      break;
-    case 'k':
-      current_channel = (current_channel > 0) ?
-                        current_channel - 1 : kNumServos - 1;
-      break;
-    case 'h':
-      trim[current_channel] = max(-128, trim[current_channel] - 10);
-      break;
-    case 'l':
-      trim[current_channel] = min(127, trim[current_channel] + 10);
-      break;
-    case 'R':
-      LoadTrim();
-      break;
-    case 'W':
-      SaveTrim();
-      break;
-    case '?':
-      Help();
-      break;
-    case '!':
-      enable_swing = !enable_swing;
+    switch (c) {
+      case 'j':
+        current_channel =
+            (current_channel < kNumServos - 1) ? current_channel + 1 : 0;
+        break;
+      case 'k':
+        current_channel =
+            (current_channel > 0) ? current_channel - 1 : kNumServos - 1;
+        break;
+      case 'h':
+        trim[current_channel] = max(-128, trim[current_channel] - 10);
+        break;
+      case 'l':
+        trim[current_channel] = min(127, trim[current_channel] + 10);
+        break;
+      case 'R':
+        LoadTrim();
+        break;
+      case 'W':
+        SaveTrim();
+        break;
+      case '?':
+        Help();
+        break;
+      case '!':
+        enable_swing = !enable_swing;
     }
     Prompt();
   }
   delay(15);
 }
-

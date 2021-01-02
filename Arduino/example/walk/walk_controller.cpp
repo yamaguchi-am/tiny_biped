@@ -32,8 +32,7 @@ void WalkController::Init() {
 void WalkController::AdvanceState(const Command& command) {
   if (command.forward || command.turn) {
     current_command_ = command;
-  }
-  if (command.forward == 0 && command.turn == 0 && first_) {
+  } else if (command.forward == 0 && command.turn == 0 && first_) {
     command = current_command_;
   }
   if (command.forward == 0 && command.turn == 0) {
@@ -175,4 +174,3 @@ void WalkController::GetPose(float* output_angles) const {
     output_angles[i] = (1 - ratio) * start_angles[i] + ratio * end_angles[i];
   }
 }
-
