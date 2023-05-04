@@ -13,9 +13,7 @@ const int kTurnAngleMsec = 150;
 const float kTwistDurationSec = 0.4;
 const float kRollDurationSec = 0.2;
 
-WalkController::WalkController() {
-  Init();
-}
+WalkController::WalkController() { Init(); }
 
 void WalkController::Init() {
   current_pose_.pivot = P_CENTER;
@@ -37,46 +35,46 @@ void WalkController::AdvanceState(const Command& command) {
   }
   if (command.forward == 0 && command.turn == 0) {
     switch (phase_) {
-     case STAND_STILL:
-     case LEFT_START_OR_END:
-     case RIGHT_START_OR_END:
-      phase_ = STAND_STILL;
-      break;
-     case RIGHT_1:
-     case RIGHT_2:
-      phase_ = RIGHT_START_OR_END;
-      break;
-     case LEFT_1:
-     case LEFT_2:
-      phase_ = LEFT_START_OR_END;
-      break;
+      case STAND_STILL:
+      case LEFT_START_OR_END:
+      case RIGHT_START_OR_END:
+        phase_ = STAND_STILL;
+        break;
+      case RIGHT_1:
+      case RIGHT_2:
+        phase_ = RIGHT_START_OR_END;
+        break;
+      case LEFT_1:
+      case LEFT_2:
+        phase_ = LEFT_START_OR_END;
+        break;
     }
   } else {
     switch (phase_) {
-     case STAND_STILL:
-      phase_ = RIGHT_START_OR_END;
-      first_ = true;
-      break;
-     case RIGHT_START_OR_END:
-      phase_ = RIGHT_2;
-      break;
-     case RIGHT_1:
-      phase_ = RIGHT_2;
-      break;
-     case RIGHT_2:
-      phase_ = LEFT_1;
-      first_ = false;
-      break;
-     case LEFT_1:
-      phase_ = LEFT_2;
-      break;
-     case LEFT_2:
-      phase_ = RIGHT_1;
-      first_ = false;
-      break;
-     case LEFT_START_OR_END:
-      phase_ = LEFT_2;
-      break;
+      case STAND_STILL:
+        phase_ = RIGHT_START_OR_END;
+        first_ = true;
+        break;
+      case RIGHT_START_OR_END:
+        phase_ = RIGHT_2;
+        break;
+      case RIGHT_1:
+        phase_ = RIGHT_2;
+        break;
+      case RIGHT_2:
+        phase_ = LEFT_1;
+        first_ = false;
+        break;
+      case LEFT_1:
+        phase_ = LEFT_2;
+        break;
+      case LEFT_2:
+        phase_ = RIGHT_1;
+        first_ = false;
+        break;
+      case LEFT_START_OR_END:
+        phase_ = LEFT_2;
+        break;
     }
   }
 }
@@ -84,41 +82,41 @@ void WalkController::AdvanceState(const Command& command) {
 void WalkController::StartNextMove(const Command& command) {
   current_pose_ = next_pose_;
   switch (phase_) {
-   case STAND_STILL:
-    next_pose_.pivot = P_CENTER;
-    next_pose_.twist = 0;
-    next_pose_.toes = 0;
-    break;
-   case RIGHT_START_OR_END:
-    next_pose_.pivot = P_RIGHT;
-    next_pose_.twist = 0;
-    next_pose_.toes = 0;
-    break;
-   case LEFT_START_OR_END:
-    next_pose_.pivot = P_LEFT;
-    next_pose_.twist = 0;
-    next_pose_.toes = 0;
-    break;
-   case RIGHT_1:
-    next_pose_.pivot = P_RIGHT;
-    next_pose_.twist = kTwistAngleMsec * command.forward;
-    next_pose_.toes = kTurnAngleMsec * command.turn;
-    break;
-   case RIGHT_2:
-    next_pose_.pivot = P_RIGHT;
-    next_pose_.twist = -kTwistAngleMsec * command.forward;
-    next_pose_.toes = -kTurnAngleMsec * command.turn;
-    break;
-   case LEFT_1:
-    next_pose_.pivot = P_LEFT;
-    next_pose_.twist = -kTwistAngleMsec * command.forward;
-    next_pose_.toes = -kTurnAngleMsec * command.turn;
-    break;
-   case LEFT_2:
-    next_pose_.pivot = P_LEFT;
-    next_pose_.twist = kTwistAngleMsec * command.forward;
-    next_pose_.toes = kTurnAngleMsec * command.turn;
-    break;
+    case STAND_STILL:
+      next_pose_.pivot = P_CENTER;
+      next_pose_.twist = 0;
+      next_pose_.toes = 0;
+      break;
+    case RIGHT_START_OR_END:
+      next_pose_.pivot = P_RIGHT;
+      next_pose_.twist = 0;
+      next_pose_.toes = 0;
+      break;
+    case LEFT_START_OR_END:
+      next_pose_.pivot = P_LEFT;
+      next_pose_.twist = 0;
+      next_pose_.toes = 0;
+      break;
+    case RIGHT_1:
+      next_pose_.pivot = P_RIGHT;
+      next_pose_.twist = kTwistAngleMsec * command.forward;
+      next_pose_.toes = kTurnAngleMsec * command.turn;
+      break;
+    case RIGHT_2:
+      next_pose_.pivot = P_RIGHT;
+      next_pose_.twist = -kTwistAngleMsec * command.forward;
+      next_pose_.toes = -kTurnAngleMsec * command.turn;
+      break;
+    case LEFT_1:
+      next_pose_.pivot = P_LEFT;
+      next_pose_.twist = -kTwistAngleMsec * command.forward;
+      next_pose_.toes = -kTurnAngleMsec * command.turn;
+      break;
+    case LEFT_2:
+      next_pose_.pivot = P_LEFT;
+      next_pose_.twist = kTwistAngleMsec * command.forward;
+      next_pose_.toes = kTurnAngleMsec * command.turn;
+      break;
   }
   if (current_pose_.pivot != next_pose_.pivot) {
     duration_ = kRollDurationSec;
@@ -135,8 +133,8 @@ void GeneratePose(struct PoseParam param, float* output) {
   // the outer edge of the foot will push the ground to tilt the robot.
   const int kRollFree = 700;
 
-  int pivot_roll = (param.toes != 0) ? kRollPivotDeltaForTurn :
-      kRollPivotDeltaForTurn;
+  int pivot_roll =
+      (param.toes != 0) ? kRollPivotDeltaForTurn : kRollPivotDeltaForTurn;
   if (param.pivot == P_RIGHT) {
     output[kIdRightRoll] = -pivot_roll;
     output[kIdLeftRoll] = -kRollFree;

@@ -7,9 +7,9 @@ struct ControllerInput {
       buttons[i] = false;
     }
   }
-  float StickX() const { return stick_x;};
-  float StickY() const { return stick_y;};
-  bool Button(int id) const { return buttons[id];};
+  float StickX() const { return stick_x; };
+  float StickY() const { return stick_y; };
+  bool Button(int id) const { return buttons[id]; };
   bool buttons[10];
   float stick_x;
   float stick_y;
@@ -26,4 +26,3 @@ class RemoteController {
 };
 
 #endif  // REMOTE_CONTROLLER_H_
-

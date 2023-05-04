@@ -2,4 +2,3 @@
 
 #define MECHANISM_VERSION 2
 #define BOARD_VERSION 2
-

@@ -2,6 +2,7 @@
 
 #include <IRremote.h>
 #include <IRremoteInt.h>
+
 #include "hw_config.h"
 
 // IR Remote Control key codes.
@@ -40,7 +41,7 @@ void IrRemote::Init() {
 bool DecodeEightDirections(long keycode, float* out_x, float* out_y) {
   *out_x = 0;
   *out_y = 0;
-  switch(keycode) {
+  switch (keycode) {
     case IR_KEY_RIGHT:
       *out_x = 1;
       break;
@@ -48,11 +49,11 @@ bool DecodeEightDirections(long keycode, float* out_x, float* out_y) {
       *out_x = -1;
       break;
     case IR_KEY_UP:
-     *out_y = 1;
-     break;
+      *out_y = 1;
+      break;
     case IR_KEY_DOWN:
-     *out_y = -1;
-     break;
+      *out_y = -1;
+      break;
   }
 }
 
@@ -74,27 +75,26 @@ ControllerInput IrRemote::Fetch() {
       key_code = 0;
       prev_key_code = key_code;
     } else {
-      no_carrier_count_ ++;
+      no_carrier_count_++;
     }
   }
   DecodeEightDirections(key_code, &result.stick_x, &result.stick_y);
-  switch(key_code) {
-  case IR_KEY_A:
-   result.buttons[0] = true;
-   break;
-  case IR_KEY_B:
-   result.buttons[1] = true;
-   break;
-  case IR_KEY_C:
-   result.buttons[2] = true;
-   break;
-  case IR_KEY_CENTER:
-   result.buttons[3] = true;
-   break;
-  case IR_KEY_POWER:
-   result.buttons[4] = true;
-   break;
+  switch (key_code) {
+    case IR_KEY_A:
+      result.buttons[0] = true;
+      break;
+    case IR_KEY_B:
+      result.buttons[1] = true;
+      break;
+    case IR_KEY_C:
+      result.buttons[2] = true;
+      break;
+    case IR_KEY_CENTER:
+      result.buttons[3] = true;
+      break;
+    case IR_KEY_POWER:
+      result.buttons[4] = true;
+      break;
   }
   return result;
 }
-

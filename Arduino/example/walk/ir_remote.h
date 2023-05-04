@@ -2,7 +2,7 @@
 
 class IrRemote : public RemoteController {
  public:
-  IrRemote() : no_carrier_count_(0) {};
+  IrRemote() : no_carrier_count_(0){};
   void Init();
 
   // Fetch current data and return buttons.
@@ -12,4 +12,3 @@ class IrRemote : public RemoteController {
   int no_carrier_count_;
   long prev_key_code;
 };
-
