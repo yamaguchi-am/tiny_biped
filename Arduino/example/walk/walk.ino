@@ -10,12 +10,10 @@
  * B : Stand on the outer edges of the feet.
  *
  * Install Arduino-IRremote library before compiling this sketch.
- * https://github.com/z3t0/Arduino-IRremote
+ * https://github.com/Arduino-IRremote/Arduino-IRremote
  */
 
 #include <EEPROM.h>
-#include <IRremote.h>
-#include <IRremoteInt.h>
 #include <Servo.h>
 #include <math.h>
 
